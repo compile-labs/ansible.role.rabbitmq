@@ -1,0 +1,16 @@
+---
+galaxy_info:
+  author: Muhammad Taqi Hassan
+  description: An Ansible role to nginx instalation.
+  company: Compile Labs
+  license: MIT
+  min_ansible_version: 2
+  platforms:
+  - name: Ubuntu
+    versions:
+    - xenial
+    - trusty
+  categories:
+  - web
+  - development
+dependencies: []

@@ -1,0 +1,39 @@
+---
+# RabbitMQ official install
+- name: Add the official rabbitmq repository's key
+  apt_key: url="https://www.rabbitmq.com/rabbitmq-signing-key-public.asc" state=present
+  become: yes
+
+- name: Add ppa repository
+  apt_repository: repo="deb http://www.rabbitmq.com/debian/ testing main" state=present
+  become: yes
+
+- name: Install server
+  apt: name=rabbitmq-server update_cache=yes allow_unauthenticated=yes
+  become: yes
+
+- name: Copy main config file
+  template: src=rabbitmq.config dest=/etc/rabbitmq/rabbitmq.config mode=0755
+  become: yes
+
+- name: Remove guest access
+  rabbitmq_user: user=guest state=absent
+  become: yes
+
+# TODO: investigate permissions
+# force=yes to recreate users to update the passwords
+- name: Add users
+  rabbitmq_user: user={{ item.username }} password={{ item.password }} vhost=/ configure_priv=.* read_priv=.* write_priv=.* state=present force=yes
+  with_items: "{{ rabbit_mq__users }}"
+  become: yes
+  no_log: true
+
+- name: Add management plugin
+  rabbitmq_plugin: names=rabbitmq_management state=enabled
+  become: yes
+  when: rabbit_mq__install_web_ui
+
+- name: Add web ui user
+  rabbitmq_user: user={{ rabbit_mq__admin_username }} password={{ rabbit_mq__admin_password }} force=yes tags=administrator
+  become: yes
+  when: rabbit_mq__install_web_ui

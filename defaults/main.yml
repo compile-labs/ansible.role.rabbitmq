@@ -1,0 +1,10 @@
+---
+rabbit_mq__install_web_ui: true
+rabbitmq_plugins: []
+
+rabbit_mq__users:
+  - {username: "user1", password: "mM?t5rRa^W6V-2S4"}
+  - {username: "user2", password: "k9KSk2y5ucHm__local"}
+
+rabbit_mq__admin_username: "rabbitmqadmin"
+rabbit_mq__admin_password: "rabbitmqadmin"
